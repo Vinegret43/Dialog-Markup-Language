@@ -1,0 +1,34 @@
+
+# Talking
+Alice: Hello!
+
+# Branching
+> Hi
+|   Alice: How are you?
+|   > I'm fine
+# |   |   {self.Alice.happy()}
+|   |   Alice: good
+|   >> Not really okay
+# |   |   {self.Alice.sad()}
+|   |   Alice: why?
+>> Sorry, too busy right now
+|   Alice: okay
+
+Alice: Goodbye
+
+# If / elif / else statements
+# > [if condition]
+# |   123
+# >> [elif condition]
+# |   123
+# >> [else]
+# |   123
+
+# Functions
+
+fn myfunc
+|   Alice: Is this a func?
+|   > Yes
+|   >> No
+|   |   Alice: why don't you fix it tho
+# Comment at the end
