@@ -28,14 +28,21 @@ class Expression:
         return function, functions
 
 
+class Responce:
+    def __init__(self, type, **kwargs):
+        self.type = type
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
 # Write your expressions here. See docs/Dev/Expressions.md for more info
 
 class Phrase(Expression):
     regexp = '^.*:.*$'
 
     def generator(self, block, function, functions):
-        responce = [block[1], block[2]]
-        return ['return', ['phrase', *responce]]
+        responce = Responce('phrase', author=block[1], text=block[2])
+        return ['return', responce]
 
     def build(self, line, function, fname, functions):
         name, phrase = line.split(':', 1)
@@ -56,33 +63,47 @@ class Function(Expression):
         return function, functions
 
 
-class IfElifElse(Expression):
-    # TODO: cmplete this expression
-    regexp = r'^[>|>>][\[.*\]|_]'
+class FunctiuonCall(Expression):
+    regexp = r'^.*\(\)$'
 
     def generator(self, block, function, functions):
-        self.condition_index = 0
-        return ['eval', block[0][0]]
+        return ['call', block[1]]
+
+    def build(self, line, function, fname, functions):
+        function.append([self.type, line[:-2].strip()])
+        return function, functions
+
+
+class IfElifElse(Expression):
+    regexp = r'^(if|elif|else).*$'
+
+    def generator(self, block, function, functions):
+        self.condition_index = 1
+        return ['eval', block[1][2]]
 
     def process_responce(self, block, function, functions, responce):
         if responce:
             return ['call', block[self.condition_index][1]]
-        # Trying to process the next condition (elif or else)
         else:
-            if len(block) == self.condition_index:
-                return None
+            # Processing the next condition (elif or else)
             self.condition_index += 1
-            return ''
+            try:
+                condition = block[self.condition_index]
+            except IndexError:
+                return None
+            if condition[0] == 'elif':
+                return ['eval', condition[2]]
+            elif condition[0] == 'else':
+                return ['call', condition[1]]
+
 
     def build(self, line, function, fname, functions, inner_func=None):
-        type = line.count('>')
-        line = line.replace('>', '')[1:-1].strip()
-        # TODO: complete code processing
-        code = ...  # Compiling and processing the code
-        if type == 1:
-            function[-1].append([code, inner_func])
-        elif type == 2:
-            function.append([self.type, [code, inner_func]])
+        if line.startswith('if'):
+            function.append([self.type, ['if', inner_func, line[2:].strip()]])
+        elif line.startswith('elif'):
+            function[-1].append(['elif', inner_func, line[4:].strip()])
+        else:
+            function[-1].append(['else', inner_func])
         return function, functions
 
 
@@ -90,7 +111,8 @@ class Branch(Expression):
     regexp = '^[>|>>].*$'
 
     def generator(self, block, function, functions):
-        return ['get_responce', ['question', [i[0] for i in block[1:]]]]
+        responce = Responce('question', variants=[i[0] for i in block[1:]])
+        return ['get_responce', responce]
 
     def process_responce(self, block, function, functions, responce):
         if responce.isdecimal():
@@ -117,5 +139,5 @@ class PythonCode(Expression):
 
     def build(self, line, function, fname, functions):
         line = line[1:-1].strip()
-        function.append([self.type, compile(line, '', 'exec')])
+        function.append([self.type, line])
         return function, functions

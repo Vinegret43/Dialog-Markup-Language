@@ -6,24 +6,21 @@ Alice: Hello!
 > Hi
 |   Alice: How are you?
 |   > I'm fine
-# |   |   {self.Alice.happy()}
 |   |   Alice: good
 |   >> Not really okay
-# |   |   {self.Alice.sad()}
 |   |   Alice: why?
 >> Sorry, too busy right now
-|   Alice: okay
+|   myfunc()
 
 Alice: Goodbye
 
 # If / elif / else statements
-# > [if condition]
-# |   123
-# >> [elif condition]
-# |   123
-# >> [else]
-# |   123
-
+if False
+|   {print(1)}
+elif True
+|   {print(2)}
+else
+|   {print(3)}
 # Functions
 
 fn myfunc

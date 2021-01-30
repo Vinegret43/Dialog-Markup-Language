@@ -16,10 +16,10 @@ def interpreter(expressions, dialog, vars=None):
             return
         expression = [i for i in expressions if i.type == block[0]][0]
         responce = expression.generator(block, cursor.funcname(), dialog)
-        if not responce:
-            continue
         while 1:
-            if responce[0] == 'return':
+            if not responce:
+                break
+            elif responce[0] == 'return':
                 yield responce[1]
                 break
             elif responce[0] == 'exec':
