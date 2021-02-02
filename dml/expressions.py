@@ -28,7 +28,7 @@ class Expression:
         return function, functions
 
 
-class Responce:
+class Response:
     def __init__(self, type, **kwargs):
         self.type = type
         for key, value in kwargs.items():
@@ -41,11 +41,19 @@ class Phrase(Expression):
     regexp = '^.*:.*$'
 
     def generator(self, block, function, functions):
-        responce = Responce('phrase', author=block[1], text=block[2])
-        return ['return', responce]
+        # If there's code
+        if block[2].startswith('{'):
+            return ['eval', block[2][1:-1]]
+        response = Response('phrase', author=block[1], text=block[2])
+        return ['return', response]
+
+    def process_response(self, block, function, functions, response):
+        response = Response('phrase', author=block[1], text=response)
+        return response
 
     def build(self, line, function, fname, functions):
         name, phrase = line.split(':', 1)
+
         function.append([self.type, name, phrase])
         return function, functions
 
@@ -81,8 +89,8 @@ class IfElifElse(Expression):
         self.condition_index = 1
         return ['eval', block[1][2]]
 
-    def process_responce(self, block, function, functions, responce):
-        if responce:
+    def process_response(self, block, function, functions, response):
+        if response:
             return ['call', block[self.condition_index][1]]
         else:
             # Processing the next condition (elif or else)
@@ -95,7 +103,6 @@ class IfElifElse(Expression):
                 return ['eval', condition[2]]
             elif condition[0] == 'else':
                 return ['call', condition[1]]
-
 
     def build(self, line, function, fname, functions, inner_func=None):
         if line.startswith('if'):
@@ -111,14 +118,14 @@ class Branch(Expression):
     regexp = '^[>|>>].*$'
 
     def generator(self, block, function, functions):
-        responce = Responce('question', variants=[i[0] for i in block[1:]])
-        return ['get_responce', responce]
+        response = Response('question', variants=[i[0] for i in block[1:]])
+        return ['get_response', response]
 
-    def process_responce(self, block, function, functions, responce):
-        if responce.isdecimal():
-            func = block[1:][int(responce)][1]
+    def process_response(self, block, function, functions, response):
+        if response.isdecimal():
+            func = block[1:][int(response)][1]
         else:
-            func = list(filter(lambda x: x[0] == responce, block[1:]))[0][1]
+            func = list(filter(lambda x: x[0] == response, block[1:]))[0][1]
         return ['call', func]
 
     def build(self, line, function, fname, functions, inner_func=None):

@@ -3,20 +3,24 @@ from dml import Dml
 
 # Getting an instance of DML
 dml = Dml()
-# Getting interpreter for the dialog
 
+# Building all dialogues
+dml.build('examples/')
+
+# Getting an interpreter for the dialog
 dialog = dml.get_dialog('examples/example1.dml')
 
-try:
-    while 1:
-        responce = next(dialog)
-        if responce.type == 'question':
-            print(responce.variants)
-            # Input could be a string with this variant or its index in list
-            dialog.send(input())
-        elif responce.type == 'phrase':
-            print("{}: {}".format(responce.author, responce.text))
-
-# When dialog ends, it will throw StopIteration
-except StopIteration:
-    print('Dialog Ended!')
+# Parsing through the dialog
+while 1:
+    response = dialog.next()
+    # If responce is None, it means that dialog is ended
+    if not response:
+        break
+    if response.type == 'phrase':
+        # If it's a phrase, just printing it out
+        print("{}: {}".format(response.author, response.text))
+    elif response.type == 'question':
+        print(response.variants)
+        # Input can be a string with this variant or its index in list
+        chosen_variant = input()
+        dialog.send(chosen_variant)

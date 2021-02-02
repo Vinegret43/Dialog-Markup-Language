@@ -5,7 +5,7 @@ import re
 
 class Compiler:
     def __init__(self, expressions):
-        self.expressions = expressions
+        self.expressions = [i() for i in expressions]
 
     def build(self, path):
         path = os.path.abspath(path)

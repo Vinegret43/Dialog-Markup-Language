@@ -1,15 +1,16 @@
 
 # Dialog Markup Language
 
-Dialog Markup Language lets you create non-linear dialogues in your games/apps/etc.
-using Python. It has its own syntax which goal is to make dialog files more
-readable and editable.
+Dialog Markup Language lets you create non-linear dialogues for your
+games/apps/etc. using Python. It has its own syntax which goal is to make dialog
+files more readable and editable.
 
 #### Features:
 1. Simple and readable syntax
-2. Multiple tools for creating branching and non-linearity
-3. Compiling dialogues so that they will work faster on runtime
+2. Lightweight and pretty fast
+3. Ability to execute Python code in dialogues
 
-#### Drawbacks:
-1. This is written with Python, while most game developers use C++ or C#
-2. Some bugs and unmade features because development started just now
+#### Unmade features:
+1. Syntax checker, but it's coming soon
+
+To see how to use it, you can see docs in ./docs/HowToUse folder.

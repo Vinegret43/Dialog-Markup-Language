@@ -3,7 +3,7 @@ import os
 import pickle
 from . import expressions
 from .compiler import Compiler
-from .interpreter import interpreter
+from .interpreter import Interpreter
 from .caching import write_file, get_file
 
 
@@ -12,7 +12,6 @@ class Dml:
         if vars is None:
             vars = {}
         self.expressions = expressions.get_expressions()
-        self.expressions = [i() for i in self.expressions]
         self.compiler = Compiler(self.expressions)
 
     # Build the file and write it to cache. You can use this
@@ -23,7 +22,10 @@ class Dml:
             raise FileNotFoundError(path)
         if os.path.isdir(path):
             for path_to_file in os.scandir(path):
-                self.build_file(path_to_file, recompile)
+                if os.path.isfile(path_to_file):
+                    self.build_file(path_to_file, recompile)
+                else:
+                    self.build(path_to_file, recompile)
         else:
             self.build_file(path, recompile)
 
@@ -47,4 +49,4 @@ class Dml:
             dialog = self.build_file(path)
         else:
             dialog = pickle.loads(dialog)
-        return interpreter(self.expressions, dialog)
+        return Interpreter(self.expressions, dialog)

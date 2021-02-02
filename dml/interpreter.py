@@ -1,39 +1,60 @@
 
+class Interpreter:
+    '''This is a wrapper for "interpreter" generator. It
+    handles StopIteration exception, so you don't  need to
+    write try/except in your code, and also it's easier to
+    handle vars when using this class'''
+    def __init__(self, expressions, dialog, vars=None):
+        self.expressions = [i() for i in expressions]
+        self.generator = interpreter(self.expressions, dialog, vars)
+
+    def next(self):
+        try:
+            response = next(self.generator)
+        except StopIteration as e:
+            self.vars = e
+            response = None
+        return response
+
+    def send(self, argument):
+        self.generator.send(argument)
+
+
 def interpreter(expressions, dialog, vars=None):
     '''
     This funciton is a generator that iterates through code and
-    returns responces from it. Every responce is
-    a list where first element represents type of responce, all
-    other elements are body of the responce. Type depends on which
+    returns responses from it. Every response is
+    a list where first element represents type of response, all
+    other elements are body of the response. Type depends on which
     expression block refers to. If you're using stock version
     of DML, you can find documentation for all types in
-    docs/BuiltInExpressions.md
+    docs/Dev/Expressions.md
     '''
     cursor = Cursor('main', dialog)
     while 1:
         block = cursor.next_element()
         if not block:
-            return
+            return vars
         expression = [i for i in expressions if i.type == block[0]][0]
-        responce = expression.generator(block, cursor.funcname(), dialog)
+        response = expression.generator(block, cursor.funcname(), dialog)
         while 1:
-            if not responce:
+            if not response:
                 break
-            elif responce[0] == 'return':
-                yield responce[1]
+            elif response[0] == 'return':
+                yield response[1]
                 break
-            elif responce[0] == 'exec':
-                exec(responce[1])
+            elif response[0] == 'exec':
+                exec(response[1])
                 break
-            elif responce[0] == 'call':
-                cursor.call(responce[1])
+            elif response[0] == 'call':
+                cursor.call(response[1])
                 break
-            elif responce[0] == 'eval':
-                result = eval(responce[1])
-            elif responce[0] == 'get_responce':
-                result = yield responce[1]
+            elif response[0] == 'eval':
+                result = eval(response[1])
+            elif response[0] == 'get_response':
+                result = yield response[1]
                 yield
-            responce = expression.process_responce(block,
+            response = expression.process_response(block,
                                                    cursor.funcname(),
                                                    dialog, result)
 
