@@ -10,7 +10,4 @@ files more readable and editable.
 2. Lightweight and pretty fast
 3. Ability to execute Python code in dialogues
 
-#### Unmade features:
-1. Syntax checker, but it's coming soon
-
 To see how to use it, you can see docs in ./docs/HowToUse folder.
