@@ -1,6 +1,8 @@
 
 import os
 import re
+from .syntax import checker
+from ntpath import basename
 
 
 class Compiler:
@@ -16,11 +18,17 @@ class Compiler:
         text = self.remove_comments(text)
         lines = text.splitlines()
 
-        # Removing empty lines
-        lines = list(filter(None, lines))
-
         # Indenting each line, or [index, text_of_line]
         lines = list(map(self.count_indent, lines))
+
+        # Checking that there's no syntax errors
+        error = checker.check_syntax(lines, basename(path))
+        if error:
+            print(error.traceback)
+            exit()
+
+        # Removing empty lines
+        lines = list(filter(None, lines))
 
         # Getting all functions. Result is a dict where keys
         # are function names and values are lists:
@@ -36,7 +44,15 @@ class Compiler:
         return re.sub('#.*', '', text)
 
     def count_indent(self, line):
-        return [line.count('|'),
+        indent = 0
+        for char in line:
+            if char == '|':
+                indent += 1
+            elif char == ' ':
+                continue
+            else:
+                break
+        return [indent,
                 line.replace('|', '').strip()]
 
     # This function finds all indented blocks and moves them

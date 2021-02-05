@@ -4,28 +4,27 @@ Alice: Hello!
 
 # Branching
 > Hi
-|   Alice: How are you?
-|   > I'm fine
-|   |   Alice: good
-|   >> Not really okay
-|   |   Alice: why?
+|  Alice: How are you?
+|  > I'm fine
+|  |  Alice: good
+|  >> Not really okay
+|  |  Alice: why?
 >> Sorry, too busy right now
-|   myfunc()
+|  myfunc()
 
 Alice: Goodbye
 
 # If / elif / else statements
 if False
-|   {print(1)}
+|  {print(1)}
 elif True
-|   {print(2)}
+|  {print(2)}
 else
-|   {print(3)}
-# Functions
+|  {print(3)}
 
+# Functions
 fn myfunc
-|   Alice: Is this a func?
-|   > Yes
-|   >> No
-|   |   Alice: why don't you fix it tho
-# Comment at the end
+|  Alice: "Is this a func?"
+|  > Yes |
+|  >> No
+|  |  Alice: why don't you fix it tho
