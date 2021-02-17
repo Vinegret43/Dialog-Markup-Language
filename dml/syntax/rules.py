@@ -8,6 +8,7 @@ brackets_stack = {'quote': None,
                   'normal': [],
                   'curly': []}
 
+
 def brackets_rule(line, indent, index, lines):
     global brackets_stack
     for char_index, char in enumerate(line):
@@ -37,6 +38,7 @@ def brackets_rule(line, indent, index, lines):
                 else:
                     brackets_stack['curly'].pop()
 
+
 # In the end it checks if some bracket/quote is opened but not closed
 def count_brackets_end(lines):
     for type, pos in brackets_stack.items():
@@ -51,7 +53,9 @@ def count_brackets_end(lines):
 
 # Checking for if/elif/else statements
 
+
 indents = []
+
 
 def ifelifelse_rule(line, indent, index, lines):
     global indents
@@ -80,7 +84,9 @@ def ifelifelse_rule(line, indent, index, lines):
 
 # Checking for branches
 
+
 branch_indents = []
+
 
 def branching_rule(line, indent, index, lines):
     global branch_indents
@@ -103,8 +109,10 @@ def branching_rule(line, indent, index, lines):
 
 # Processing functions
 
+
 functions = []
 func_calls = []
+
 
 def functions_rule(line, indent, index, lines):
     global functions, func_calls
@@ -128,6 +136,7 @@ def functions_rule(line, indent, index, lines):
     elif line.endswith('()') and ':' not in line:
         func_calls.append((index, line[:-2]))
 
+
 def check_functions_names_end(lines):
     global func_calls, functions
     for line_index, funcname in func_calls:
@@ -138,6 +147,7 @@ def check_functions_names_end(lines):
 
 # Processing indentation
 
+
 zero_indent_line = None
 previous_indent = 0
 regexps = [
@@ -145,6 +155,7 @@ regexps = [
     re.compile(r'^(if|elif|else).*$'),
     re.compile('^fn .*$')
 ]
+
 
 def indentation_rule(line, indent, index, lines):
     global zero_indent_line, previous_indent, regexps

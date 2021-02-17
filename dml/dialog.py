@@ -13,6 +13,7 @@ class Dml:
             vars = {}
         self.expressions = expressions.get_expressions()
         self.compiler = Compiler(self.expressions)
+        self.workdir = None
 
     # Build the file and write it to cache. You can use this
     # to build everything while your game is loading instead
@@ -33,6 +34,8 @@ class Dml:
     # can compile all files in a folder. However, this method
     # returns compiled result
     def build_file(self, path, recompile=False):
+        if self.workdir:
+            path = os.path.join(self.workdir, path)
         dialog = get_file(path)
         if dialog is None or recompile:
             dialog = self.compiler.build(path)
@@ -43,10 +46,12 @@ class Dml:
     # This function returns an interpreter object for file
     # specified in path. If this object is not in cache,
     # it will automatically build it
-    def get_dialog(self, path):
+    def get_dialog(self, path, vars=None):
+        if self.workdir:
+            path = os.path.join(self.workdir, path)
         dialog = get_file(path)
         if dialog is None:  # If it's not in cache
             dialog = self.build_file(path)
         else:
             dialog = pickle.loads(dialog)
-        return Interpreter(self.expressions, dialog)
+        return Interpreter(self.expressions, dialog, vars=vars)

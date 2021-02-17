@@ -1,14 +1,15 @@
 
+import sys
 from dml import Dml
 
 # Getting an instance of DML
 dml = Dml()
 
-# Building all dialogues
-dml.build('examples/')
+if len(sys.argv) <= 1:
+    exit('Please specify path to the .dml file as an argument')
 
 # Getting an interpreter for the dialog
-dialog = dml.get_dialog('examples/example1.dml')
+dialog = dml.get_dialog(sys.argv[1])
 
 # Parsing through the dialog
 while 1:
@@ -19,6 +20,8 @@ while 1:
     if response.type == 'phrase':
         # If it's a phrase, just printing it out
         print("{}: {}".format(response.author, response.text))
+        # Waiting for user to hit enter
+        input()
     elif response.type == 'question':
         print(response.variants)
         # Input can be a string with this variant or its index in list

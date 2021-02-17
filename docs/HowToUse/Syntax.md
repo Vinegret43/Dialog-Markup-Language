@@ -11,28 +11,28 @@ Bob: Are You okay?
 
 # Branching
 > Yes
-|    Bob: Good
+  Bob: Good
 >> No
-|    Bob: Why?
-|    > ...
-|    | ...
-|    >> ...
-|    | ...
+  Bob: Why?
+  > ...
+    ...
+  >> ...
+    ...
 
 # Python code
 {import random}
 
 # if/elif/else statements
 if False
-|    Python: This line will never be executed
+  Python: This line will never be executed
 elif random.random() > 0.5
-|    Python: This line will be executed in 50% cases
+  Python: This line will be executed in 50% cases
 else
-|    Python: This line will be executed in other 50% cases
+  Python: This line will be executed in other 50% cases
 
 # Functions
 fn SayHello
-|    Player: Hello!
+  Player: Hello!
 
 # Function calls
 SayHello()
@@ -65,20 +65,20 @@ any text until a newline
 ```yaml
 # First block
 > First variant
-|    ... # Here you can write any code
-|    > 1 # And other branches as well
-|    |    ...
-|    >> 2
-|    |    ...
+  ... # Here you can write any code
+  > 1 # And other branches as well
+    ...
+  >> 2
+    ...
 >> Second variant
-|    ...
+  ...
 >> Third variant
-|    ...
+  ...
 # Second block
 > First variant # Every new block starts with '>' sign
-|    ...
+  ...
 >> Second variant # All other variants start with '>>'
-|    ...
+  ...
 ```
 In other games you've seen that NPC's can ask you some questions, and after that
 dialog will change depending on what you've answered. Dialog branching allows
@@ -87,8 +87,8 @@ you to do the same thing in your games.
 Every new branches block starts with '>' sign. All other branches in this block
 start with '>>'. You can write variant of answer after '>' sign (On the same line).
 To specify the code that will be in this branch, write it under the branch and start
-it with '|' (Pipe) sign. If you have another branch inside a branch, you need to
-start code inside it with two pipes ('||'), then with 3, and etc.
+it with a tab or two spaces. If you have another branch inside a branch, you need to
+start code inside it with two tabs (Or four spaces), and etc.
 
 ### Python code in your dialog
 
@@ -111,11 +111,11 @@ and the text of the phrase will be replaced with what your code returned.
 
 ```yaml
 if some_condition()
-| Python: some_conidtion is True
+  Python: some_conidtion is True
 elif another_condition()
-| Python: another condition is True, some_condition if False
+  Python: another condition is True, some_condition if False
 else
-| Python: Both conditions are False
+  Python: Both conditions are False
 ```
 
 This is the same as branching, but it checks conditions automatically, it doesn't
@@ -140,7 +140,7 @@ You can specify any amount of 'elif' conditions, or don't specify them at all.
 ```yaml
 # Defining the function
 fn myFunc
-| Dev: write here whatever you want
+  Dev: write here whatever you want
 
 # Calling the function
 myFunc()
@@ -151,15 +151,10 @@ myFunc()
 
 Functions are made to organize your code and make it more clear. Every function
 starts with 'fn' keyword, and after that keyword you need to specify the name of
-the function. Under the function you can write your code (Starting it with '|'
-pipe). To call the  function write name of the function and brackets after it.
+the function. Under the function you can write your code (Indenting it with two
+spaces or tab). To call the  function write name of the function and brackets after it.
 
 How you can use it:
 For example there are two indetical blocks of code in your dialog, and it's not good
 when code is repeating twice. So you can make a function, cut and paste this code
 in this function, and then replace those blocks of code with just function calls.
-
-## Tips to write better DML
-
-Insert two spaces after each '|' (pipe) sign, so that your code won't look so
-flat and it will become more readable

@@ -44,6 +44,13 @@ and Interpreter object. If it's in cache it'll just get it from there
 and return an Interpreter object.
 **Returns**: An instance of Interpreter (See doc for this class below)
 
+##### workdir
+> This is a variable (Default value is None). You can put path to folder
+with dialogues in this variable. After that, when you use *build*
+or *get_dialog* methods, specified path to the file you need to get
+will be relative to this *workdir*. Use this to not write path
+to the directory with your dialogues every time.
+
 *****
 
 ## Interpreter (dml.interpreter.Interpreter)

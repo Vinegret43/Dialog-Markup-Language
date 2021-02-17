@@ -18,7 +18,7 @@ class Compiler:
         text = self.remove_comments(text)
         lines = text.splitlines()
 
-        # Indenting each line, or [index, text_of_line]
+        # Indenting each line
         lines = list(map(self.count_indent, lines))
 
         # Checking that there's no syntax errors
@@ -44,16 +44,15 @@ class Compiler:
         return re.sub('#.*', '', text)
 
     def count_indent(self, line):
+        line = line.replace('\t', '  ')
         indent = 0
         for char in line:
-            if char == '|':
+            if char == ' ':
                 indent += 1
-            elif char == ' ':
-                continue
             else:
                 break
-        return [indent,
-                line.replace('|', '').strip()]
+        return [indent // 2,
+                line.replace('\t', '').strip()]
 
     # This function finds all indented blocks and moves them
     # in a separate function, linking the function name with

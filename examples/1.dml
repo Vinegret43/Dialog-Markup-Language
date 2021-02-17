@@ -1,0 +1,33 @@
+
+# Phrases
+DML: Hello, my name is Dialog Markup Language
+
+
+# Branching
+DML: Choose any card (You can enter its name or its index in list)
+> Ace of Spades
+  DML: You've chosen Ace of Spades!
+>> Ace of Diamonds
+  DML: You've chosen Ace of Diamonds!
+
+
+# Functions
+DML: Now let's see if functions are working
+
+fn function
+  DML: If you can read this, they work
+
+function()
+
+
+# If/elif/else statements and python code
+{ import random }
+{ choice = random.random() }
+
+DML: Checking if/elif/else statements (just tossing a coin)
+if 0 < choice <= 0.45
+  DML: The coin fell on head
+elif 0.45 < choice <= 0.9
+  DML: The coin fell on tails
+else
+  DML: The coin fell on its edge, lol
